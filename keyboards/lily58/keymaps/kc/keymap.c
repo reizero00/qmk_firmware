@@ -163,7 +163,7 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 static void render_status(void) {
     // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer: "), false);
+    oled_write_P(PSTR(""), false);
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
             oled_write_P(PSTR("Default"), false);
@@ -361,9 +361,12 @@ static void render_anim(void) {
 
 void oled_task_user(void) {
     if (is_keyboard_master()) {
+        // Print the current layer and locks
         render_status();
+        // Print type logs
         oled_write_ln(read_keylog(), false);
         oled_write_ln(read_keylogs(), false);
+        
     } else {
         render_anim();
         oled_set_cursor(0,6);
@@ -401,7 +404,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
 
 void matrix_scan_user(void) {
   if (is_alt_tab_active) {
-    if (timer_elapsed(alt_tab_timer) > 1250) {
+    if (timer_elapsed(alt_tab_timer) > 600) {
       unregister_code(KC_LALT);
       is_alt_tab_active = false;
     }
