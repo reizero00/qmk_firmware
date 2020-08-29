@@ -158,35 +158,37 @@ void matrix_init_user(void) {
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   if (!is_keyboard_master())
     return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
+  // if (is_keyboard_master())
+  //   return OLED_ROTATION_270;  // flips the display 270 degrees if master
   return rotation;
 }
 
-static void render_status(void) {
-    // Host Keyboard Layer Status
-    oled_write_P(PSTR(""), false);
-    switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
-            oled_write_P(PSTR("Default"), false);
-            break;
-        case _LOWER:
-            oled_write_P(PSTR("Lower"), false);
-            break;
-        case _RAISE:
-            oled_write_P(PSTR("Raise"), false);
-            break;
-        case _ADJUST:
-            oled_write_P(PSTR("Adjust"), false);
-            break;
-        default:
-            oled_write_P(PSTR("Undefined"), false);
-    }
+// static void render_status(void) {
+//     // Host Keyboard Layer Status
+//     oled_write_P(PSTR(""), false);
+//     switch (get_highest_layer(layer_state)) {
+//         case _QWERTY:
+//             oled_write_P(PSTR("DEF"), false);
+//             break;
+//         case _LOWER:
+//             oled_write_P(PSTR("LOW"), false);
+//             break;
+//         case _RAISE:
+//             oled_write_P(PSTR("RIZE"), false);
+//             break;
+//         case _ADJUST:
+//             oled_write_P(PSTR("ADJ"), false);
+//             break;
+//         default:
+//             oled_write_P(PSTR("Undefined"), false);
+//     }
 
-    //Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("       "), false);
-    oled_write_P(led_state.caps_lock ? PSTR("CAPS ") : PSTR("       "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR("SCRL") : PSTR("       "), false);
-}
+//     //Host Keyboard LED Status
+//     // led_t led_state = host_keyboard_led_state();
+//     // oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("       "), false);
+//     // oled_write_P(led_state.caps_lock ? PSTR("CAPS ") : PSTR("       "), false);
+//     // oled_write_P(led_state.scroll_lock ? PSTR("SCRL") : PSTR("       "), false);
+// }
 
 // When you add source files to SRC in rules.mk, you can use functions.
 const char *read_layer_state(void);
@@ -240,6 +242,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
   }
   return true;
+}
+// Adding Patchoili logo
+
+static void render_logo(void) {
+    static const char PROGMEM raw_logo[] = {
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 64,  0, 16, 16, 64,192,128,  0,  0,128,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,128,  0,128,208,208,192,192,192,208,208,208,192,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 64, 32,  0,128, 16,160, 48,250,124,188,253,254,254,254,254,253,252,250,228,192,192,192,160,128, 64,  0,128,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,128,  2,  0,  0,  0,112,240,233,227, 31,255,254,252,252,248,244,226,226,208,180,120,250,252,252,254,254,254,254,252,253,247,111,159,219,199, 63,239,247,248,249,248,248,250,248,244,240,240,232,224,224,192,208,192,192,160,160,128,128,128,  0,128, 64, 64, 64, 64,184,130,128,  0,132,132,144, 80,208,208,208,240,240,240,241,231,126,255,255,127,127,127,255,255,255,255,255,255,255,255,255,255,254,252,252,248,244,232,208,160,  0,  0,  0,  0,  0,  0,  0,  0, 
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  0, 64,  0,128,  0,  1,127,255,254,  3,255,255,255,255,255,255,255,255,255,255,254,253,255,251,247,239,223,175,119,251,255,221,195,253,118,223,127,127,255,255,255,255,255,255,255, 63,127,191,191,191,191,255,191,191,191,127,255,255,255,127,223,255,239,255,247,119,191,219,219,251,193, 13,125,151,239,111,174,233,199,207,238,237,252,248,240,224,192,129,  2,189,251,239,255,255,255,255,255,255,255,255,255,255,255,255,255,252,250,224,  0,128,  0,  0, 
+        0,  0,  0,  0,  0,  0,  0,240,240,240,240,240,248,248,248,248,248,248,240,128,  0,  0,240,255,255,224,239,255,223,223,223,255,191,191,191,255,127,127,127,255,255,255,255,255,255,238,217,254,123, 17,241,225,225,240,240,240,240,240,252,254,250,251,253,251,119,247,247, 55,215, 95, 55,240,129, 49,  1, 62,255,255,255,255,255,254,253,255,253,253,255,254,254,255,255,253,231, 63,255,255,255,255,255,127,255, 63,255,247,248,255,255,255,255,255,255,255,255,255,255,127,255,191, 63,255,255,255,255,255,255,224, 28,  0,
+    };
+    oled_write_raw_P(raw_logo, sizeof(raw_logo));
 }
 
 // WPM-responsive animation stuff here
@@ -361,12 +374,13 @@ static void render_anim(void) {
 
 void oled_task_user(void) {
     if (is_keyboard_master()) {
-        // Print the current layer and locks
-        render_status();
-        // Print type logs
-        oled_write_ln(read_keylog(), false);
-        oled_write_ln(read_keylogs(), false);
-        
+// Add Patche
+    	render_logo();
+// Print the current layer and locks
+        // render_status();
+// Print type logs
+        // oled_write_ln(read_keylog(), false);
+        // oled_write_ln(read_keylogs(), false);
     } else {
         render_anim();
         oled_set_cursor(0,6);
