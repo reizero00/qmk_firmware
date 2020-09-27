@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RGBLED_NUM 10    // Number of LEDs
 #define RGBLIGHT_EFFECT_TWINKLE
 
-// #define RGBLIGHT_SLEEP
+#define RGBLIGHT_SLEEP
 #define RGBLED_SPLIT { 5, 5 }
 
 //encoder configuration
